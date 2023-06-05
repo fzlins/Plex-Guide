@@ -1,3 +1,5 @@
+# -*- coding: utf-8-sig -*-'
+
 # python -m Plexmatch -d 'C:\directory -o'
 # python -m Plexmatch -d '//Network\directory -o'
 
@@ -37,9 +39,9 @@ def remove_prefix(text, prefix):
         return text[len(prefix):]
     return text
 
-with open(plexmatchFilePath,"a+", encoding="utf-8-sig") as f:
+with open(plexmatchFilePath,"a+") as f:
     print("# Regular episodes with tricky filenames", file=f)
-    season_number = '01'
+    season_number = 1
     if (args.season):
         season_number = args.season
 
@@ -47,7 +49,11 @@ with open(plexmatchFilePath,"a+", encoding="utf-8-sig") as f:
     for filename in filelist:
         ep = re.search(r'\d{2,3}', remove_prefix(filename, commonprefix)).group()
         if (args.order and index != int(ep)):
-            continue
+            if int(ep) == 1:
+                season_number = season_number + 1
+                index = 1
+            else:    
+                continue
 
         index = index + 1
         line = f"ep: S{season_number}E{ep}: {filename}"
